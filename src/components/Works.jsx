@@ -1,0 +1,100 @@
+import React from "react";
+import { motion } from "framer-motion";
+import { projects } from "../constants";
+import { fadeIn, textVariant } from "../utils/motion";
+import { styles } from "../styles";
+import { github } from "../assets";
+
+const ProjectCard = ({ project, index }) => {
+  return (
+    <motion.div
+      variants={fadeIn("up", "spring", index * 0.2, 0.75)}
+      className="glass-container bg-transparent backdrop-blur-sm p-5 rounded-2xl sm:w-[480px] w-full"
+    >
+      <div className="relative w-full h-[230px]">
+        {/* YouTube Video Player */}
+        <div className="w-full h-full rounded-2xl overflow-hidden">
+          <iframe
+            src={project.videoUrl}
+            title={project.name}
+            className="w-full h-full border-0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        </div>
+
+        {/* GitHub Link Overlay */}
+        <div className="absolute top-3 right-3 z-10">
+          <div
+            onClick={() => window.open(project.source_code_link, "_blank")}
+            className="black-gradient w-10 h-10 rounded-full flex justify-center items-center cursor-pointer hover:scale-110 transition-transform duration-300"
+          >
+            <img
+              src={github}
+              alt="github"
+              className="w-1/2 h-1/2 object-contain"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Project Content */}
+      <div className="mt-5">
+        <h3 className="text-white font-bold text-[24px]">{project.name}</h3>
+        <p className="mt-2 text-secondary text-[14px] leading-5">
+          {project.description}
+        </p>
+      </div>
+
+      {/* Technology Tags */}
+      <div className="mt-4 flex flex-wrap gap-2">
+        {project.tags.map((tag) => (
+          <p key={tag.name} className={`text-[14px] ${tag.color} font-medium`}>
+            #{tag.name}
+          </p>
+        ))}
+      </div>
+    </motion.div>
+  );
+};
+
+const Works = () => {
+  return (
+    <motion.section
+      className={`${styles.padding} max-w-7xl mx-auto relative z-0`}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.25 }}
+    >
+      <motion.div variants={textVariant()}>
+        <p className={styles.sectionSubText}>My work</p>
+        <h2 className={styles.sectionHeadText}>Projects.</h2>
+      </motion.div>
+
+      <div className="w-full flex">
+        <motion.p
+          variants={fadeIn("", "", 0.1, 1)}
+          className="mt-3 text-secondary text-[17px] max-w-3xl leading-[30px]"
+        >
+          Following projects showcase my skills and experience through
+          real-world examples of my work. Each project is briefly described with
+          links to code repositories and live demos. It reflects my ability to
+          solve complex problems, work with different technologies, and manage
+          projects effectively.
+        </motion.p>
+      </div>
+
+      <div className="mt-20 flex flex-wrap gap-7">
+        {projects.map((project, index) => (
+          <ProjectCard
+            key={`project-${index}`}
+            project={project}
+            index={index}
+          />
+        ))}
+      </div>
+    </motion.section>
+  );
+};
+
+export default Works;
