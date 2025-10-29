@@ -32,7 +32,7 @@ import tripguide from "./tripguide.png";
 import unity from "./unity-white.svg";
 
 import threeLines from "../assets/company/ThreeLinesXr.jpeg";
-import codeSudan from "../assets/company/codesudan.jpeg";
+import codeSudan from "../assets/company/codeSudan.jpeg";
 import riftDigitalLab from "../assets/company/riftDigitalLab.jpeg";
 import sumakers from "../assets/company/sumakers.jpeg";
 import vr_dev from "../assets/services/vr_dev.png";
