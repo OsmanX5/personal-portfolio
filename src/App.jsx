@@ -12,7 +12,6 @@ import {
   StarsCanvas,
 } from "./components";
 import Aurora from "./components/Aurora";
-import GlassSurface from "./components/GlassSurface";
 
 function MainBG() {
   console.log("Rendering MainBG");

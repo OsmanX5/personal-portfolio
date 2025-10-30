@@ -3,7 +3,6 @@ import { motion, useMotionValue } from "framer-motion";
 import { styles } from "../styles";
 import { services } from "../Data/index.js";
 import { fadeIn, textVariant } from "../utils/motion";
-import GlassSurface from "./GlassSurface";
 
 function ServiceCard({ title, icon }) {
   const [scale, setScale] = React.useState(1);
