@@ -4,13 +4,18 @@ import {
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
-import { experiences } from "../constants";
+import { experiences } from "../Data";
 
-const WorkIcon = ({ icon }) => (
-  <div className="hover:scale-120 cursor-pointer ">
-    <img className="rounded-full" src={icon} alt={icon} />
-  </div>
-);
+const WorkIcon = ({ icon, company_link }) => {
+  function OpenWorkLink() {
+    window.open(company_link, "_blank");
+  }
+  return (
+    <div onClick={OpenWorkLink} className="hover:scale-120 cursor-pointer p-2">
+      <img className="rounded-full" src={icon} alt={icon} />
+    </div>
+  );
+};
 
 function ExperienceCard({ experience }) {
   console.log(experience.iconBg);
@@ -28,7 +33,12 @@ function ExperienceCard({ experience }) {
         contentArrowStyle={{ borderRight: "7px solid  rgb(33, 150, 243)" }}
         date={experience.date}
         iconStyle={{ background: `${experience.iconBg}`, color: "#fff" }}
-        icon={<WorkIcon icon={experience.icon} />}
+        icon={
+          <WorkIcon
+            icon={experience.icon}
+            company_link={experience.company_link}
+          />
+        }
       >
         <h3 className="vertical-timeline-element-title text-2xl">
           {experience.title}

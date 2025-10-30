@@ -11,16 +11,34 @@ import {
   Works,
   StarsCanvas,
 } from "./components";
+import Aurora from "./components/Aurora";
+import GlassSurface from "./components/GlassSurface";
+
+function MainBG() {
+  console.log("Rendering MainBG");
+  return (
+    <div className="z-[-1] fixed inset-0 bg-[#060010]">
+      <Aurora
+        colorStops={["#1E1B4B", "#3730A3", "#6366F1"]}
+        blend={0.5}
+        amplitude={2.0}
+        speed={1}
+      />
+    </div>
+  );
+}
 function App() {
   return (
     <>
       <BrowserRouter>
-        <div className="relative z-0 bg-[#01021e]">
-          <div className="bg-[url('./assets/herobg-blue.png')] bg-cover bg-no-repeat bg-center mt-0">
+        <MainBG />
+        <div className="z-0">
+          <div>
             <Navbar />
             <Hero />
           </div>
           <About />
+
           <Experience />
           <Tech />
           <Works />

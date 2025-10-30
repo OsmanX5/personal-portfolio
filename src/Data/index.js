@@ -1,37 +1,31 @@
+import { unity } from "../assets";
+
 import {
-  mobile,
-  backend,
-  creator,
-  web,
+  // Tech imports
   javascript,
   typescript,
   html,
   css,
-  reactjs,
+  reactJs as reactjs,
   redux,
   tailwind,
-  nodejs,
-  mongodb,
+  nodeJs as nodejs,
+  mongoDb as mongodb,
   git,
   figma,
   docker,
-  meta,
-  starbucks,
-  tesla,
-  shopify,
-  carrent,
-  jobit,
-  tripguide,
-  threejs,
-  unity,
-  threeLines,
+  threeJs as threejs,
+
+  // Company imports
   codeSudan,
   riftDigitalLab,
-  sumakers,
-  vr_dev,
-  frontEnd,
-} from "../assets";
+  suMakers as sumakers,
+  threeLinesXr as threeLines,
 
+  // Services imports
+  vrDev as vr_dev,
+  frontEnd,
+} from "../assets/Icons";
 export const navLinks = [
   {
     id: "about",
@@ -123,7 +117,7 @@ const experiences = [
     company_name: "3 Lines XR",
     company_link: "https://xr.3lines.com.sa",
     icon: threeLines,
-    iconBg: "#E6DEDD",
+    iconBg: "#fff",
     date: "Aug 2023 - Present",
     points: [
       "Led XR aviation ground-handling training development for HTC Vive, Pico, and Meta Quest.",
@@ -139,7 +133,7 @@ const experiences = [
     company_name: "Rift Digital Lab",
     company_link: "https://www.riftdigital.net/",
     icon: riftDigitalLab,
-    iconBg: "#E6DEDD",
+    iconBg: "#222",
     date: "Aug 2022 - Aug 2023",
     points: [
       "Developed 3 VR and 2 AR training applications using Unity and C#.",
@@ -154,9 +148,9 @@ const experiences = [
   {
     title: "CS50 Instructor",
     company_name: "Code Sudan",
-    company_link: "https://www.linkedin.com/company/codesudan/",
+    company_link: "https://www.linkedin.com/company/codesudan/about/",
     icon: codeSudan,
-    iconBg: "#E6DEDD",
+    iconBg: "#fff",
     date: "Aug 2022 - Aug 2023",
     points: [
       "Delivered CS50-based fundamentals training: Scratch, C, Python, SQL.",
@@ -170,7 +164,7 @@ const experiences = [
     title: "Game Developer",
     company_name: "Moonrift Entertainment",
     company_link: "https://www.linkedin.com/company/moonrift-entertainment/",
-    iconBg: "#E6DEDD",
+    iconBg: "#fff",
     date: "Aug 2022 - Aug 2023",
     points: [
       "Collaborated on game development for the upcoming title “Flame Runner.”",
@@ -183,7 +177,7 @@ const experiences = [
     company_name: "Sumakers",
     company_link: "https://www.facebook.com/sumakerslab/",
     icon: sumakers,
-    iconBg: "#E6DEDD",
+    iconBg: "#fff",
     date: "Aug 2022 - Aug 2023",
     points: [
       "Designed IoT circuits and programmed embedded systems (Arduino, MicroC).",
@@ -223,100 +217,74 @@ const testimonials = [
 
 const projects = [
   {
-    name: "Ground Handling Training XR",
-    description:
-      "Comprehensive XR simulation for aviation ground handling training. Covers the full product lifecycle from GDD to MVP and global release. Features modular exercises, multi-headset support, and LMS integration.",
+    name: "VR for BME Training",
+    description: `Training and Learning platform in VR with Quest 2 allows Biomedical Engineering students to learn more 
+about devices and reassemble them with little cost against the real devices. 
+The user can see animations for the device disassembling and show information about every part. 
+Showing the electrical components in the PCB and showing the datasheets. 
+Taking the device parts and reassembling the device. 
+Showing surgery room and main devices catalogs.`,
     tags: [
       { name: "unity", color: "blue-text-gradient" },
       { name: "xr", color: "green-text-gradient" },
       { name: "csharp", color: "pink-text-gradient" },
     ],
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    source_code_link: "https://osmanelfaki.com/",
+    videoUrl: "https://www.youtube.com/embed/zoc31WjlzzA?si=rRaZqMe_fcqwd0n2",
   },
   {
-    name: "Trainee Activity Tracking & LMS Integration",
-    description:
-      "Custom tracking system to monitor trainee progress and sync results with a Learning Management System for training analytics and assessment.",
+    name: "Chemistry LAB VR",
+    description: `An immersive VR experience for chemistry students to explore molecular structures and chemical reactions in a virtual lab environment.`,
     tags: [
       { name: "unity", color: "blue-text-gradient" },
-      { name: "backend", color: "green-text-gradient" },
-      { name: "integration", color: "pink-text-gradient" },
-    ],
-    videoUrl: "https://www.youtube.com/embed/ScMzIvxBSi4",
-    source_code_link: "https://osmanelfaki.com/",
-  },
-  {
-    name: "Modular Exercise System",
-    description:
-      "A modular architecture enabling quick creation and expansion of XR training exercises, improving scalability and content management.",
-    tags: [
-      { name: "unity", color: "blue-text-gradient" },
-      { name: "architecture", color: "green-text-gradient" },
-      { name: "xr", color: "pink-text-gradient" },
-    ],
-    videoUrl: "https://www.youtube.com/embed/9bZkp7q19f0",
-    source_code_link: "https://osmanelfaki.com/",
-  },
-  {
-    name: "Unity Editor Automation Tools",
-    description:
-      "Custom Unity Editor extensions to automate repetitive development workflows, streamline builds, and boost team productivity.",
-    tags: [
-      { name: "unity-editor", color: "blue-text-gradient" },
-      { name: "tooling", color: "green-text-gradient" },
+      { name: "xr", color: "green-text-gradient" },
       { name: "csharp", color: "pink-text-gradient" },
     ],
-    videoUrl: "https://www.youtube.com/embed/kJQP7kiw5Fk",
-    source_code_link: "https://osmanelfaki.com/",
+    videoUrl: "https://www.youtube.com/embed/4ehJzpnkzGE?si=iA7LaToFmqZ4t_OO",
   },
   {
-    name: "Cambridge VR Learning Apps",
-    description:
-      "Three VR applications designed to simplify 6th-grade Cambridge science topics through immersive 3D visualizations and interactive experiments.",
-    tags: [
-      { name: "unity", color: "blue-text-gradient" },
-      { name: "vr", color: "green-text-gradient" },
-      { name: "education", color: "pink-text-gradient" },
-    ],
-    videoUrl: "https://www.youtube.com/embed/2Vv-BfVoq4g",
-    source_code_link: "https://osmanelfaki.com/",
-  },
-  {
-    name: "Cambridge AR Learning Apps",
-    description:
-      "Two AR applications complementing Cambridge curriculum topics, enabling students to explore 3D models interactively using AR devices.",
+    name: "Space AR",
+    description: `Space AR is an application using AR to learn more about planets and know information about their shapes, mass, radius, and moons this is my first AR Application and it’s a very promising field the app will work in any android, iOS phone, and the images can be printed with any colored printer. this project was designed according to the Cambridge grade 6 science book for all international school students.`,
     tags: [
       { name: "unity", color: "blue-text-gradient" },
       { name: "ar", color: "green-text-gradient" },
-      { name: "education", color: "pink-text-gradient" },
     ],
-    videoUrl: "https://www.youtube.com/embed/hFcLyDb6niA",
-    source_code_link: "https://osmanelfaki.com/",
+    videoUrl: "https://www.youtube.com/embed/4ehJzpnkzGE?si=iA7LaToFmqZ4t_OO",
   },
   {
-    name: "Digital Twins & WebXR Exhibits",
-    description:
-      "Created digital twins of real-world exhibits using 360° cameras, deployed via WebXR for cross-platform accessibility on mobile, VR, and browsers.",
-    tags: [
-      { name: "webxr", color: "blue-text-gradient" },
-      { name: "360media", color: "green-text-gradient" },
-      { name: "unity", color: "pink-text-gradient" },
-    ],
-    videoUrl: "https://www.youtube.com/embed/RGKi6LSPDL4",
-    source_code_link: "https://osmanelfaki.com/",
-  },
-  {
-    name: "Flame Runner (Prototype)",
-    description:
-      "Gameplay demo built in Unity that secured seed funding for the studio. Focused on core mechanics, physics, and gameplay polish.",
+    name: "Ballistics AR",
+    description: `An AR application that demonstrates the principles of ballistics by allowing users to visualize projectile trajectories in their real-world environment.`,
     tags: [
       { name: "unity", color: "blue-text-gradient" },
-      { name: "gameplay", color: "green-text-gradient" },
-      { name: "prototype", color: "pink-text-gradient" },
+      { name: "ar", color: "green-text-gradient" },
     ],
-    videoUrl: "https://www.youtube.com/embed/BaW_jenozKc",
-    source_code_link: "https://osmanelfaki.com/",
+    videoUrl: "https://www.youtube.com/embed/rOFBNLN4fS0?si=pSkp7GVm-URoP6fh",
+  },
+  {
+    name: "Electrical Circuits Lab VR",
+    description: `An immersive VR experience for students to learn about electrical circuits by building and testing virtual circuits in a safe environment.`,
+    tags: [
+      { name: "unity", color: "blue-text-gradient" },
+      { name: "vr", color: "green-text-gradient" },
+    ],
+    videoUrl: "https://www.youtube.com/embed/YRB2bLWqlAI?si=hxbQLfV5K0vbjWH7",
+  },
+  {
+    name: "Aircraft Engine Simulation (MR)",
+    description: `A mixed reality application that allows users to explore and interact with a virtual aircraft engine in a real-world environment.`,
+    tags: [
+      { name: "unity", color: "blue-text-gradient" },
+      { name: "ar", color: "green-text-gradient" },
+    ],
+    videoUrl: "https://www.youtube.com/embed/SbvP3mihHXs?si=2uBvjeDyyRr-FWhc",
+  },
+  {
+    name: "Ground Handling VR Training",
+    description: `Developed an immersive VR training application for aviation ground-handling staff, enhancing operational efficiency and safety through realistic simulations on HTC Vive and Meta Quest platforms.`,
+    tags: [
+      { name: "unity", color: "blue-text-gradient" },
+      { name: "vr", color: "green-text-gradient" },
+    ],
+    videoUrl: "https://www.youtube.com/embed/bTvnUCT1TCU?si=IqR0_k60kfcme5B_",
   },
 ];
 
