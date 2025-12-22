@@ -1,8 +1,20 @@
 import React from "react";
 import { motion, useMotionValue } from "framer-motion";
 import { styles } from "../styles";
-import { services } from "../Data/index.js";
 import { fadeIn, textVariant } from "../utils/motion";
+import { useResume } from "../context/ResumeContext";
+import { unity } from "../assets";
+import { vrDev, frontEnd } from "../assets/Icons";
+
+// Map skills to icons - you can expand this mapping as needed
+const skillIconMap = {
+  Unity: unity,
+  "XR Development (AR/VR/MR)": vrDev,
+  "SDK development": frontEnd,
+  "C#": unity,
+  Scripting: frontEnd,
+  "Embedded Systems": frontEnd,
+};
 
 function ServiceCard({ title, icon }) {
   const [scale, setScale] = React.useState(1);
@@ -28,6 +40,15 @@ function ServiceCard({ title, icon }) {
 }
 
 const About = () => {
+  const { resumeData } = useResume();
+
+  // Get skills from API and map them to services with icons
+  const services =
+    resumeData?.skills?.slice(0, 3).map((skill) => ({
+      title: skill.name,
+      icon: skillIconMap[skill.name] || frontEnd, // Use frontEnd as default icon
+    })) || [];
+
   return (
     <section className=" max-w-7xl mx-auto relative z-0 mt-20">
       <motion.div variants={textVariant()}>
@@ -48,7 +69,7 @@ const About = () => {
       </motion.p>
       <div className="mt-20 flex flex-wrap gap-10 items-center justify-center">
         {services.map((service, index) => (
-          <ServiceCard title={service.title} icon={service.icon} />
+          <ServiceCard key={index} title={service.title} icon={service.icon} />
         ))}
       </div>
     </section>

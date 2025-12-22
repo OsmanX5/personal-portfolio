@@ -12,6 +12,8 @@ import {
   StarsCanvas,
 } from "./components";
 import Aurora from "./components/Aurora";
+import { ResumeProvider, useResume } from "./context/ResumeContext";
+import Loader from "./components/Loader";
 
 function MainBG() {
   console.log("Rendering MainBG");
@@ -26,29 +28,65 @@ function MainBG() {
     </div>
   );
 }
-function App() {
-  return (
-    <>
-      <BrowserRouter>
-        <MainBG />
-        <div className="z-0">
-          <div>
-            <Navbar />
-            <Hero />
-          </div>
-          <About />
 
-          <Experience />
-          <Tech />
-          <Works />
-          <Feedbacks />
-          <div className="relative z-0">
-            <Contact />
-            <StarsCanvas />
+function AppContent() {
+  const { loading, error } = useResume();
+
+  if (loading) {
+    return (
+      <>
+        <MainBG />
+        <div className="flex items-center justify-center h-screen">
+          <Loader />
+        </div>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <MainBG />
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-white text-center">
+            <h2 className="text-2xl font-bold mb-4">Error Loading Data</h2>
+            <p>{error}</p>
           </div>
         </div>
-      </BrowserRouter>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <MainBG />
+      <div className="z-0">
+        <div>
+          <Navbar />
+          <Hero />
+        </div>
+        <About />
+
+        <Experience />
+        <Tech />
+        <Works />
+        <Feedbacks />
+        <div className="relative z-0">
+          <Contact />
+          <StarsCanvas />
+        </div>
+      </div>
     </>
+  );
+}
+
+function App() {
+  return (
+    <ResumeProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </ResumeProvider>
   );
 }
 

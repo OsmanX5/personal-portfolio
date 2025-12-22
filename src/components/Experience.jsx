@@ -4,11 +4,46 @@ import {
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
-import { experiences } from "../Data";
+import { useResume } from "../context/ResumeContext";
+import {
+  riftDigitalLab,
+  threeLinesXr,
+  codeSudan,
+  suMakers,
+} from "../assets/Icons";
+
+// Map company names to icons
+const companyIconMap = {
+  "3 Lines XR": threeLinesXr,
+  "Rift Digital Lab": riftDigitalLab,
+  "Code Sudan": codeSudan,
+  "Sumakers LAB": suMakers,
+};
+
+// Helper function to format date
+const formatDate = (startDate, endDate) => {
+  const formatMonthYear = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  const start = formatMonthYear(startDate);
+  const end =
+    endDate && new Date(endDate) <= new Date()
+      ? formatMonthYear(endDate)
+      : "Present";
+
+  return `${start} - ${end}`;
+};
 
 const WorkIcon = ({ icon, company_link }) => {
   function OpenWorkLink() {
-    window.open(company_link, "_blank");
+    if (company_link) {
+      window.open(company_link, "_blank");
+    }
   }
   return (
     <div onClick={OpenWorkLink} className="hover:scale-120 cursor-pointer p-2">
@@ -18,7 +53,6 @@ const WorkIcon = ({ icon, company_link }) => {
 };
 
 function ExperienceCard({ experience }) {
-  console.log(experience.iconBg);
   return (
     <>
       <VerticalTimelineElement
@@ -46,27 +80,35 @@ function ExperienceCard({ experience }) {
         <h4 className="vertical-timeline-element-subtitle text-xl text-gray-400">
           {experience.company_name}
         </h4>
-        {experience.points.map((point, index) => (
-          <ul key={`experience-point-${index}`}>
-            <li className="m-2">
-              <div className="w-2 h-2 rounded-full bg-white inline-block mr-2" />
-              <span>{point}</span>
-            </li>
-          </ul>
-        ))}
+        <p className="text-gray-300 mt-2">{experience.description}</p>
       </VerticalTimelineElement>
     </>
   );
 }
+
 const Experience = () => {
+  const { resumeData } = useResume();
+
+  // Transform API experience data to match component format
+  const experiences =
+    resumeData?.experience?.map((exp) => ({
+      title: exp.title,
+      company_name: exp.companyName,
+      company_link: "", // API doesn't provide this, you can add it later
+      icon: companyIconMap[exp.companyName] || riftDigitalLab, // Use default icon if not found
+      iconBg: "#fff",
+      date: formatDate(exp.startDate, exp.endDate),
+      description: exp.description,
+    })) || [];
+
   return (
     <div className="mt-20">
       <h2 className="text-4xl font-bold text-center mb-10 text-white">
         Experience
       </h2>
       <VerticalTimeline>
-        {experiences.map((experience) => (
-          <ExperienceCard experience={experience} />
+        {experiences.map((experience, index) => (
+          <ExperienceCard key={index} experience={experience} />
         ))}
       </VerticalTimeline>
     </div>

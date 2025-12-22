@@ -1,8 +1,45 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { technologies } from "../Data";
 import { fadeIn, textVariant } from "../utils/motion";
 import { styles } from "../styles";
+import { useResume } from "../context/ResumeContext";
+import {
+  javascript,
+  typescript,
+  html,
+  css,
+  reactJs,
+  redux,
+  tailwind,
+  nodeJs,
+  git,
+  figma,
+  docker,
+  threeJs,
+} from "../assets/Icons";
+import { unity } from "../assets";
+
+// Map skill names to available icons
+const techIconMap = {
+  "C#": unity,
+  Unity: unity,
+  JavaScript: javascript,
+  TypeScript: typescript,
+  HTML: html,
+  CSS: css,
+  React: reactJs,
+  Redux: redux,
+  Tailwind: tailwind,
+  "Node.js": nodeJs,
+  Git: git,
+  Figma: figma,
+  Docker: docker,
+  "Three.js": threeJs,
+  "XR Development (AR/VR/MR)": unity,
+  "SDK development": javascript,
+  Scripting: javascript,
+  "Embedded Systems": nodeJs,
+};
 
 const TechCard = ({ technology, index }) => {
   return (
@@ -36,6 +73,15 @@ const TechCard = ({ technology, index }) => {
 };
 
 const Tech = () => {
+  const { resumeData } = useResume();
+
+  // Map API skills to technologies with icons
+  const technologies =
+    resumeData?.skills?.map((skill) => ({
+      name: skill.name,
+      icon: techIconMap[skill.name] || javascript, // Use javascript as default icon
+    })) || [];
+
   return (
     <motion.section
       className={`${styles.padding} max-w-7xl mx-auto relative z-0`}

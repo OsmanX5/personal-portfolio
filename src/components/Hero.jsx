@@ -2,7 +2,15 @@ import React from "react";
 import { motion } from "framer-motion";
 import { styles } from "../styles";
 import { ComputersCanvas } from "./canvas";
+import { useResume } from "../context/ResumeContext";
+
 const Hero = () => {
+  const { resumeData } = useResume();
+
+  // Extract name and title from API data, with fallback values
+  const name = resumeData?.header?.name || "Osman";
+  const title = resumeData?.header?.title || "Software Engineer";
+
   return (
     <section className="relative max-w-7xl h-screen mx-auto mt-[100px]">
       {/* Hero container */}
@@ -17,14 +25,10 @@ const Hero = () => {
           <h1 className="text-7xl font-bold">
             Hi , I'm{" "}
             <span className="bg-linear-to-t from-sky-500 to-indigo-500 bg-clip-text text-transparent text-underline">
-              Osman
+              {name.split(" ")[0]}
             </span>
           </h1>
-          <p className="mt-2 text-lg max-w-xl mt-5 h-[200px]">
-            I am a Certified Unity Professional Programmer and experienced
-            software engineer with 4 years of delivering clean, scalable code
-            and well-designed architectures.
-          </p>
+          <p className="mt-2 text-lg max-w-xl mt-5 h-[200px]">{title}</p>
         </div>
       </div>
       <div className="h-full relative top-[-300px] z-0">
