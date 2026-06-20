@@ -1,117 +1,94 @@
-import React from "react";
-import {
-  VerticalTimeline,
-  VerticalTimelineElement,
-} from "react-vertical-timeline-component";
-import "react-vertical-timeline-component/style.min.css";
+import { motion } from "framer-motion";
+import { styles } from "../styles";
 import { useResume } from "../context/ResumeContext";
-import {
-  riftDigitalLab,
-  threeLinesXr,
-  codeSudan,
-  suMakers,
-} from "../assets/Icons";
+import SectionHeading from "./ui/SectionHeading";
 
-// Map company names to icons
-const companyIconMap = {
-  "3 Lines XR": threeLinesXr,
-  "Rift Digital Lab": riftDigitalLab,
-  "Code Sudan": codeSudan,
-  "Sumakers LAB": suMakers,
-};
+const ease = [0.22, 1, 0.36, 1];
 
-// Helper function to format date
-const formatDate = (startDate, endDate) => {
-  const formatMonthYear = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      year: "numeric",
-    });
-  };
-
-  const start = formatMonthYear(startDate);
-  const end =
-    endDate && new Date(endDate) <= new Date()
-      ? formatMonthYear(endDate)
-      : "Present";
-
-  return `${start} - ${end}`;
-};
-
-const WorkIcon = ({ icon, company_link }) => {
-  function OpenWorkLink() {
-    if (company_link) {
-      window.open(company_link, "_blank");
-    }
-  }
-  return (
-    <div onClick={OpenWorkLink} className="hover:scale-120 cursor-pointer p-2">
-      <img className="rounded-full" src={icon} alt={icon} />
+const ExperienceItem = ({ exp, index }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.2 }}
+    transition={{ duration: 0.6, ease, delay: index * 0.05 }}
+    className="relative pl-16 sm:pl-20"
+  >
+    {/* Node: company monogram on the rail */}
+    <div className="absolute left-0 top-0 grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-accent to-accent-2 font-display font-bold text-white shadow-[0_0_0_6px_rgba(5,5,16,1),0_0_30px_-6px_rgba(10,132,255,0.8)]">
+      {(exp.company || "?").charAt(0)}
     </div>
-  );
-};
 
-function ExperienceCard({ experience }) {
-  return (
-    <>
-      <VerticalTimelineElement
-        className="vertical-timeline-element--work "
-        contentStyle={{
-          background: "linear-gradient(#01021e, #00a2ff86)",
-          color: "#fff",
-          borderRadius: "25px",
-          boxShadow:
-            "inset 6px 6px 0px -6px rgba(255, 255, 255, 0.7), inset 0 0 8px 1px rgba(255, 255, 255, 0.7)",
-        }}
-        contentArrowStyle={{ borderRight: "7px solid  rgb(33, 150, 243)" }}
-        date={experience.date}
-        iconStyle={{ background: `${experience.iconBg}`, color: "#fff" }}
-        icon={
-          <WorkIcon
-            icon={experience.icon}
-            company_link={experience.company_link}
-          />
-        }
-      >
-        <h3 className="vertical-timeline-element-title text-2xl">
-          {experience.title}
-        </h3>
-        <h4 className="vertical-timeline-element-subtitle text-xl text-gray-400">
-          {experience.company_name}
-        </h4>
-        <p className="text-gray-300 mt-2">{experience.description}</p>
-      </VerticalTimelineElement>
-    </>
-  );
-}
+    <div className="glass-card rounded-2xl p-6 mb-10">
+      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-1">
+        <div>
+          <h3 className="font-display text-xl font-semibold text-ink">
+            {exp.role}
+          </h3>
+          <p className="text-accent font-medium">
+            {exp.company}
+            {exp.location ? (
+              <span className="text-faint font-normal"> · {exp.location}</span>
+            ) : null}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {exp.isCurrent && (
+            <span className="rounded-full bg-green-400/15 px-2.5 py-1 text-[11px] font-semibold text-green-300">
+              Current
+            </span>
+          )}
+          <span className="text-sm text-muted whitespace-nowrap">
+            {exp.range}
+          </span>
+        </div>
+      </div>
+
+      {exp.points.length > 0 && (
+        <ul className="mt-4 space-y-2.5">
+          {exp.points.map((point, i) => (
+            <li key={i} className="flex gap-3 text-muted text-[15px] leading-relaxed">
+              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+              <span>{point}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {exp.technologies.length > 0 && (
+        <div className="mt-5 flex flex-wrap gap-2">
+          {exp.technologies.map((tech) => (
+            <span key={tech} className="chip">
+              {tech}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  </motion.div>
+);
 
 const Experience = () => {
-  const { resumeData } = useResume();
+  const { resume } = useResume();
+  const experiences = resume?.experiences || [];
 
-  // Transform API experience data to match component format
-  const experiences =
-    resumeData?.experience?.map((exp) => ({
-      title: exp.title,
-      company_name: exp.companyName,
-      company_link: "", // API doesn't provide this, you can add it later
-      icon: companyIconMap[exp.companyName] || riftDigitalLab, // Use default icon if not found
-      iconBg: "#fff",
-      date: formatDate(exp.startDate, exp.endDate),
-      description: exp.description,
-    })) || [];
+  if (!experiences.length) return null;
 
   return (
-    <div className="mt-20">
-      <h2 className="text-4xl font-bold text-center mb-10 text-white">
-        Experience
-      </h2>
-      <VerticalTimeline>
-        {experiences.map((experience, index) => (
-          <ExperienceCard key={index} experience={experience} />
+    <section id="experience" className={styles.section}>
+      <SectionHeading
+        eyebrow="Career"
+        title="Where I've made an impact"
+        subtitle="Building and scaling real-time, XR and full-stack systems across product teams."
+      />
+
+      <div className="relative mt-14">
+        {/* Vertical rail */}
+        <div className="absolute left-6 top-2 bottom-2 w-px bg-gradient-to-b from-accent/60 via-accent-2/40 to-transparent" />
+        {experiences.map((exp, i) => (
+          <ExperienceItem key={exp.id || i} exp={exp} index={i} />
         ))}
-      </VerticalTimeline>
-    </div>
+      </div>
+    </section>
   );
 };
 

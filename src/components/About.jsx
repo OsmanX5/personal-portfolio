@@ -1,79 +1,138 @@
-import React from "react";
-import { motion, useMotionValue } from "framer-motion";
+import { motion } from "framer-motion";
 import { styles } from "../styles";
-import { fadeIn, textVariant } from "../utils/motion";
 import { useResume } from "../context/ResumeContext";
-import { unity } from "../assets";
-import { vrDev, frontEnd } from "../assets/Icons";
+import { featuredProjects } from "../Data";
+import SectionHeading from "./ui/SectionHeading";
+import { MapPinIcon } from "./ui/icons";
 
-// Map skills to icons - you can expand this mapping as needed
-const skillIconMap = {
-  Unity: unity,
-  "XR Development (AR/VR/MR)": vrDev,
-  "SDK development": frontEnd,
-  "C#": unity,
-  Scripting: frontEnd,
-  "Embedded Systems": frontEnd,
-};
+const SPECIALTIES = [
+  "Backend Architecture",
+  ".NET / C#",
+  "Real-time · WebRTC",
+  "XR / WebXR",
+  "Cloud & CI/CD",
+  "Full-stack React",
+];
 
-function ServiceCard({ title, icon }) {
-  const [scale, setScale] = React.useState(1);
-  function OnMouseEnter(e) {
-    setScale(1.1);
-  }
-  function OnMouseLeave(e) {
-    setScale(1);
-  }
-  return (
-    <motion.div
-      onMouseEnter={OnMouseEnter}
-      onMouseLeave={OnMouseLeave}
-      className=" flex items-center flex-col glass-container w-[250px] h-[200px] p-5 rounded-[20px] shadow-card  justify-center bg-radial from-[#00eeff00] to-[#01021e] hover:from-[#00a2ff86] hover:to-[#01021e] cursor-pointer"
-      animate={{ scale: scale }}
-    >
-      <img src={icon} alt={title} className="w-16 h-16 object-contain " />
-      <h3 className="text-white text-[20px] font-bold text-center mt-4">
-        {title}
-      </h3>
-    </motion.div>
-  );
-}
+const ease = [0.22, 1, 0.36, 1];
 
 const About = () => {
-  const { resumeData } = useResume();
+  const { resume } = useResume();
+  const summary = resume?.summary;
+  const stats = resume?.stats || {};
+  const edu = resume?.education?.[0];
+  const cert = resume?.certifications?.[0];
+  const location = resume?.profile?.location;
 
-  // Get skills from API and map them to services with icons
-  const services =
-    resumeData?.skills?.slice(0, 3).map((skill) => ({
-      title: skill.name,
-      icon: skillIconMap[skill.name] || frontEnd, // Use frontEnd as default icon
-    })) || [];
+  const statCards = [
+    { value: stats.yearsExperience ? `${stats.yearsExperience}+` : "4+", label: "Years experience" },
+    {
+      value: `${(stats.projectCount || 0) + featuredProjects.length}+`,
+      label: "Projects shipped",
+    },
+    { value: stats.skillCount ? `${stats.skillCount}+` : "30+", label: "Technologies" },
+  ].filter(Boolean);
 
   return (
-    <section className=" max-w-7xl mx-auto relative z-0 mt-20">
-      <motion.div variants={textVariant()}>
-        <h2 className={`${styles.sectionHeadText} mx-auto text-center`}>
-          About Me
-        </h2>
-      </motion.div>
-      <motion.p
-        variants={fadeIn("", "", 0.1, 1)}
-        className="mt-4 text-secondary text-lg max-w-3xl leading-[30px] m-auto text-center"
-      >
-        I am a Certified Unity Professional Programmer and experienced software
-        engineer with 4 years of delivering clean, scalable code and
-        well-designed architectures. I excel in collaborative environments,
-        working effectively with cross-functional teams to achieve project
-        goals. My passion for learning drives me to stay updated with the latest
-        industry trends and continuously enhance my skill set.
-      </motion.p>
-      <div className="mt-20 flex flex-wrap gap-10 items-center justify-center">
-        {services.map((service, index) => (
-          <ServiceCard key={index} title={service.title} icon={service.icon} />
+    <section id="about" className={styles.section}>
+      <SectionHeading
+        eyebrow="About"
+        title="Engineering across the stack — and into XR"
+      />
+
+      <div className="mt-12 grid gap-6 lg:grid-cols-5">
+        {/* Summary */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease }}
+          className="lg:col-span-3"
+        >
+          <p className="text-muted text-lg leading-relaxed">
+            {summary ||
+              "Senior Software Engineer focused on scalable backends, real-time systems and immersive XR."}
+          </p>
+
+          <div className="mt-7 flex flex-wrap gap-2.5">
+            {SPECIALTIES.map((s) => (
+              <span key={s} className="chip">
+                {s}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Quick facts card */}
+        <motion.aside
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease, delay: 0.1 }}
+          className="glass-card lg:col-span-2 rounded-2xl p-6"
+        >
+          <h3 className="font-display font-semibold text-ink text-lg">
+            Quick facts
+          </h3>
+          <dl className="mt-5 space-y-4 text-sm">
+            {location && (
+              <Fact label="Based in">
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPinIcon width={15} height={15} className="text-accent" />
+                  {location}
+                </span>
+              </Fact>
+            )}
+            {edu && (
+              <Fact label="Education">
+                {edu.degree}
+                <span className="block text-faint text-xs mt-0.5">
+                  {edu.institution}
+                  {edu.gpa ? ` · GPA ${edu.gpa}` : ""}
+                </span>
+              </Fact>
+            )}
+            {cert && (
+              <Fact label="Certified">
+                {cert.name}
+                {cert.issuer && (
+                  <span className="block text-faint text-xs mt-0.5">
+                    by {cert.issuer}
+                  </span>
+                )}
+              </Fact>
+            )}
+          </dl>
+        </motion.aside>
+      </div>
+
+      {/* Stats strip */}
+      <div className="mt-10 grid grid-cols-3 gap-4 sm:gap-6">
+        {statCards.map((s, i) => (
+          <motion.div
+            key={s.label}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5, ease, delay: i * 0.1 }}
+            className="glass rounded-2xl p-5 sm:p-6 text-center sm:text-left"
+          >
+            <p className="font-display font-bold text-3xl sm:text-4xl text-gradient-accent">
+              {s.value}
+            </p>
+            <p className="mt-1 text-xs sm:text-sm text-muted">{s.label}</p>
+          </motion.div>
         ))}
       </div>
     </section>
   );
 };
+
+const Fact = ({ label, children }) => (
+  <div>
+    <dt className="text-faint text-xs uppercase tracking-wider">{label}</dt>
+    <dd className="mt-1 text-ink leading-snug">{children}</dd>
+  </div>
+);
 
 export default About;

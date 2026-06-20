@@ -1,9 +1,9 @@
-const API_BASE_URL = "http://api.dev-resume.com/api";
-const RESUME_ID = "6949443c0a10599e07445233";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const RESUME_ID = import.meta.env.VITE_RESUME_ID;
 
 export const fetchResumeData = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/resume/${RESUME_ID}`);
+    const response = await fetch(`${API_BASE_URL}/Resumes/${RESUME_ID}`);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

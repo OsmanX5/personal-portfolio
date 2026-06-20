@@ -1,5 +1,12 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+} from "react";
 import { fetchResumeData } from "../services/api";
+import { normalizeResume } from "../services/normalizeResume";
 
 const ResumeContext = createContext(null);
 
@@ -34,8 +41,14 @@ export const ResumeProvider = ({ children }) => {
     loadResumeData();
   }, []);
 
+  // Normalized, UI-ready model. Memoized so it only recomputes on new data.
+  const resume = useMemo(
+    () => (resumeData ? normalizeResume(resumeData) : null),
+    [resumeData]
+  );
+
   return (
-    <ResumeContext.Provider value={{ resumeData, loading, error }}>
+    <ResumeContext.Provider value={{ resume, resumeData, loading, error }}>
       {children}
     </ResumeContext.Provider>
   );

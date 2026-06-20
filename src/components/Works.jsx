@@ -1,99 +1,123 @@
-import React from "react";
 import { motion } from "framer-motion";
-import { projects } from "../Data";
-import { fadeIn, textVariant } from "../utils/motion";
 import { styles } from "../styles";
-import { github } from "../assets";
+import { useResume } from "../context/ResumeContext";
+import { featuredProjects } from "../Data";
+import SectionHeading from "./ui/SectionHeading";
+import { ArrowUpRight, GithubIcon } from "./ui/icons";
+
+const ease = [0.22, 1, 0.36, 1];
 
 const ProjectCard = ({ project, index }) => {
+  const { title, description, tags = [], videoUrl, links = {} } = project;
+  const initial = (title || "?").charAt(0);
+
   return (
-    <motion.div
-      variants={fadeIn("up", "spring", index * 0.2, 0.75)}
-      className="glass-container bg-transparent backdrop-blur-sm p-5 rounded-2xl sm:w-[480px] w-full"
+    <motion.article
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.55, ease, delay: (index % 3) * 0.08 }}
+      className="glass-card group flex flex-col overflow-hidden rounded-2xl"
     >
-      <div className="relative w-full h-[230px]">
-        {/* YouTube Video Player */}
-        <div className="w-full h-full rounded-2xl overflow-hidden">
+      {/* Media */}
+      <div className="relative h-52 w-full overflow-hidden border-b border-white/5">
+        {videoUrl ? (
           <iframe
-            src={project.videoUrl}
-            title={project.name}
-            className="w-full h-full border-0"
+            src={videoUrl}
+            title={title}
+            loading="lazy"
+            className="h-full w-full border-0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           />
-        </div>
-
-        {/* GitHub Link Overlay */}
-        <div className="absolute top-3 right-3 z-10">
-          <div
-            onClick={() => window.open(project.source_code_link, "_blank")}
-            className="black-gradient w-10 h-10 rounded-full flex justify-center items-center cursor-pointer hover:scale-110 transition-transform duration-300"
-          >
-            <img
-              src={github}
-              alt="github"
-              className="w-1/2 h-1/2 object-contain"
-            />
+        ) : (
+          <div className="relative flex h-full w-full items-center justify-center bg-gradient-to-br from-accent/25 via-accent-2/15 to-transparent">
+            <span className="font-display text-7xl font-bold text-white/20">
+              {initial}
+            </span>
+            <span className="absolute top-3 left-3 rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold text-ink backdrop-blur">
+              Featured · Live
+            </span>
           </div>
+        )}
+      </div>
+
+      {/* Body */}
+      <div className="flex flex-1 flex-col p-6">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="font-display text-lg font-semibold text-ink leading-snug">
+            {title}
+          </h3>
+          {(links.demo || links.repo) && (
+            <div className="flex shrink-0 items-center gap-1.5">
+              {links.repo && (
+                <a
+                  href={links.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Source code"
+                  className="grid h-8 w-8 place-items-center rounded-lg text-muted transition-colors hover:bg-white/5 hover:text-ink"
+                >
+                  <GithubIcon width={17} height={17} />
+                </a>
+              )}
+              {links.demo && (
+                <a
+                  href={links.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Live demo"
+                  className="grid h-8 w-8 place-items-center rounded-lg text-muted transition-colors hover:bg-white/5 hover:text-ink"
+                >
+                  <ArrowUpRight width={17} height={17} />
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+
+        <p className="mt-2 text-sm leading-relaxed text-muted line-clamp-4">
+          {description}
+        </p>
+
+        <div className="mt-auto pt-5 flex flex-wrap gap-2">
+          {tags.slice(0, 5).map((tag) => (
+            <span key={tag} className="chip">
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
-
-      {/* Project Content */}
-      <div className="mt-5">
-        <h3 className="text-white font-bold text-[24px]">{project.name}</h3>
-        <p className="mt-2 text-secondary text-[14px] leading-5">
-          {project.description}
-        </p>
-      </div>
-
-      {/* Technology Tags */}
-      <div className="mt-4 flex flex-wrap gap-2">
-        {project.tags.map((tag) => (
-          <p key={tag.name} className={`text-[14px] ${tag.color} font-medium`}>
-            #{tag.name}
-          </p>
-        ))}
-      </div>
-    </motion.div>
+    </motion.article>
   );
 };
 
 const Works = () => {
+  const { resume } = useResume();
+
+  // API projects (e.g. Dev-Resume) lead; curated XR video demos follow.
+  const apiProjects = (resume?.projects || []).map((p) => ({
+    title: p.title,
+    description: p.description,
+    tags: p.technologies,
+    links: p.links,
+  }));
+  const projects = [...apiProjects, ...featuredProjects];
+
   return (
-    <motion.section
-      className={`${styles.padding} max-w-7xl mx-auto relative z-0`}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.25 }}
-    >
-      <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>My work</p>
-        <h2 className={styles.sectionHeadText}>Projects.</h2>
-      </motion.div>
+    <section id="work" className={styles.section}>
+      <SectionHeading
+        eyebrow="Selected work"
+        title="Things I've built"
+        subtitle="A mix of production platforms and immersive XR experiences — from a full-stack SaaS to aviation-grade VR training."
+      />
 
-      <div className="w-full flex">
-        <motion.p
-          variants={fadeIn("", "", 0.1, 1)}
-          className="mt-3 text-secondary text-[17px] max-w-3xl leading-[30px]"
-        >
-          Following projects showcase my skills and experience through
-          real-world examples of my work. Each project is briefly described with
-          links to code repositories and live demos. It reflects my ability to
-          solve complex problems, work with different technologies, and manage
-          projects effectively.
-        </motion.p>
-      </div>
-
-      <div className="mt-20 flex flex-wrap gap-7">
+      <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, index) => (
-          <ProjectCard
-            key={`project-${index}`}
-            project={project}
-            index={index}
-          />
+          <ProjectCard key={`${project.title}-${index}`} project={project} index={index} />
         ))}
       </div>
-    </motion.section>
+    </section>
   );
 };
 
